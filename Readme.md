@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Кристина Вавилина](https://up.htmlacademy.ru/univer-js1/4/user/2435413).
-* Наставник: `Неизвестно`.
+* Наставник: [Геннадий](https://htmlacademy.ru/profile/gennadiy).
 
 ---
 
