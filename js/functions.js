@@ -1,45 +1,23 @@
-function CheckLine(string, length)
-{
-  if (string.length <= length)
-  {
-    return true;
-  }
+const checkLine = (string, length) => string.length <= length;
 
-  return false;
-}
-
-function CheckPalindrome(string)
-{
+const isPalindrome = (string) => {
   string = string.toLowerCase().replaceAll(' ', '');
-  if (string === string.split('').reverse().join(''))
-  {
-    return true;
-  }
+  return string === string.split('').reverse().join('');
+};
 
-  return false;
-}
-
-function FindNumber(string)
-{
+function findNumber(string) {
   string = String(string);
   let result = '';
 
-  for (let i = 0; i < string.length; i++)
-  {
-    if (!(isNaN(parseInt(string[i], 10))))
-    {
+  for (let i = 0; i < string.length; i++) {
+    if (!(isNaN(parseInt(string[i], 10)))) {
       result += string[i];
     }
   }
 
-  if (result === '')
-  {
-    return NaN;
-  }
-
-  return parseInt(result, 10);
+  return result === '' ? NaN : parseInt(result, 10);
 }
 
-CheckLine('hello', 5);
-CheckPalindrome('Лёша на полке клопа нашёл ');
-FindNumber('2023 год');
+checkLine('hello', 5);
+isPalindrome('ДовОд');
+findNumber('007');
