@@ -5,7 +5,7 @@ const isPalindrome = (string) => {
   return string === string.split('').reverse().join('');
 };
 
-function findNumber(string) {
+const findNumber = (string) => {
   string = String(string);
   let result = '';
 
@@ -16,7 +16,7 @@ function findNumber(string) {
   }
 
   return result === '' ? NaN : parseInt(result, 10);
-}
+};
 
 checkLine('hello', 5);
 isPalindrome('ДовОд');
