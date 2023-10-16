@@ -1,4 +1,9 @@
-const COUNTSPHOTOS = 25;
+const COUNT_PHOTOS = 25;
+const MIN_LIKES = 15;
+const MIN_AVATAR = 1;
+const MAX_LIKES = 200;
+const MAX_AVATAR = 6;
+
 const NAMES = ['Masha', 'Sasha', 'Pasha', 'Dasha', 'Vasya', 'Popa'];
 const MESSAGES = [
   'Всё отлично!',
@@ -7,7 +12,6 @@ const MESSAGES = [
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
-const listPhotos = [];
 
 const getRandomIntegerFromRange = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -40,27 +44,23 @@ const createRandomIntFromRangeGenerator = (min, max) => {
   };
 };
 
-const generatePhotoId = createRandomIntFromRangeGenerator(1, 25);
-const generatePhotoUrl = createRandomIntFromRangeGenerator(1, 25);
-const generatePhotoLikes = createRandomIntFromRangeGenerator(15, 200);
-const generateRandomInteger = getRandomInteger();
-
 const generateDataForPhoto = (countPhotos) => {
+  const generatePhotoLikes = createRandomIntFromRangeGenerator(MIN_LIKES, MAX_LIKES);
+  const generateRandomInteger = getRandomInteger();
 
-  for (let i = 0; i < countPhotos; i++) {
-    listPhotos.push({
-      id: generatePhotoId(),
-      url: `photos/${generatePhotoUrl()}.jpg`,
+  return new Array(countPhotos).fill('').map((_, index) => (
+    {
+      id: index,
+      url: `photos/${index}.jpg`,
       description: 'Хайп',
       likes: generatePhotoLikes(),
       commets: {
         id: generateRandomInteger(),
-        avatar: `img/avatar-${getRandomIntegerFromRange(1, 6)}.svg`,
-        message: MESSAGES[getRandomIntegerFromRange(0, MESSAGES.length - 1)],
-        name: NAMES[getRandomIntegerFromRange(0, NAMES.length - 1)]
+        avatar: `img/avatar-${getRandomIntegerFromRange(MIN_AVATAR, MAX_AVATAR)}.svg`,
+        message: MESSAGES[index % MESSAGES.length],
+        name: NAMES[index % NAMES.length]
       }
-    });
-  }
+    }));
 };
 
-generateDataForPhoto(COUNTSPHOTOS);
+console.log(generateDataForPhoto(COUNT_PHOTOS));
