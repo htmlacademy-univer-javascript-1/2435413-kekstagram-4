@@ -63,4 +63,4 @@ const generateDataForPhoto = (countPhotos) => {
     }));
 };
 
-console.log(generateDataForPhoto(COUNT_PHOTOS));
+generateDataForPhoto(COUNT_PHOTOS);
