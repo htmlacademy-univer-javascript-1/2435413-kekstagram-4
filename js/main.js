@@ -1,8 +1,13 @@
 const COUNT_PHOTOS = 25;
-const MIN_LIKES = 15;
-const MIN_AVATAR = 1;
-const MAX_LIKES = 200;
-const MAX_AVATAR = 6;
+const DESCRIPTION = 'Хайп';
+const avatarId = {
+  MIN: 1,
+  MAX: 6
+};
+const likes = {
+  MIN: 15,
+  MAX: 200
+};
 
 const NAMES = ['Masha', 'Sasha', 'Pasha', 'Dasha', 'Vasya', 'Popa'];
 const MESSAGES = [
@@ -13,12 +18,8 @@ const MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
-const getRandomIntegerFromRange = (a, b) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-};
+const getRandomIntegerFromRange = (start, end) =>
+  Math.ceil(Math.random() * (end - start + 1)) + start - 1;
 
 const getRandomInteger = () => {
   let lastGeneratedId = 0;
@@ -45,18 +46,18 @@ const createRandomIntFromRangeGenerator = (min, max) => {
 };
 
 const generateDataForPhoto = (countPhotos) => {
-  const generatePhotoLikes = createRandomIntFromRangeGenerator(MIN_LIKES, MAX_LIKES);
+  const generatePhotoLikes = createRandomIntFromRangeGenerator(likes.MIN, likes.MAX);
   const generateRandomInteger = getRandomInteger();
 
   return new Array(countPhotos).fill('').map((_, index) => (
     {
       id: index,
       url: `photos/${index}.jpg`,
-      description: 'Хайп',
+      description: DESCRIPTION,
       likes: generatePhotoLikes(),
       commets: {
         id: generateRandomInteger(),
-        avatar: `img/avatar-${getRandomIntegerFromRange(MIN_AVATAR, MAX_AVATAR)}.svg`,
+        avatar: `img/avatar-${getRandomIntegerFromRange(avatarId.MIN, avatarId.MAX)}.svg`,
         message: MESSAGES[index % MESSAGES.length],
         name: NAMES[index % NAMES.length]
       }
