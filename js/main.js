@@ -1,10 +1,10 @@
 const COUNT_PHOTOS = 25;
 const DESCRIPTION = 'Хайп';
-const avatarId = {
+const AvatarId = {
   MIN: 1,
   MAX: 6
 };
-const likes = {
+const CountLike = {
   MIN: 15,
   MAX: 200
 };
@@ -46,7 +46,7 @@ const createRandomIntFromRangeGenerator = (min, max) => {
 };
 
 const generateDataForPhoto = (countPhotos) => {
-  const generatePhotoLikes = createRandomIntFromRangeGenerator(likes.MIN, likes.MAX);
+  const generatePhotoLikes = createRandomIntFromRangeGenerator(CountLike.MIN, CountLike.MAX);
   const generateRandomInteger = getRandomInteger();
 
   return new Array(countPhotos).fill('').map((_, index) => (
@@ -57,7 +57,7 @@ const generateDataForPhoto = (countPhotos) => {
       likes: generatePhotoLikes(),
       commets: {
         id: generateRandomInteger(),
-        avatar: `img/avatar-${getRandomIntegerFromRange(avatarId.MIN, avatarId.MAX)}.svg`,
+        avatar: `img/avatar-${getRandomIntegerFromRange(AvatarId.MIN, AvatarId.MAX)}.svg`,
         message: MESSAGES[index % MESSAGES.length],
         name: NAMES[index % NAMES.length]
       }
