@@ -1,23 +1,20 @@
-const checkLine = (string, length) => string.length <= length;
+const getTimeInMinutes = (time) => {
+  time = time.split(':').map(Number);
 
-const isPalindrome = (string) => {
-  string = string.toLowerCase().replaceAll(' ', '');
-  return string === string.split('').reverse().join('');
+  return time[0] * 60 + time[1];
 };
 
-const findNumber = (string) => {
-  string = String(string);
-  let result = '';
+const isOnTime = (timeStartDay, timeEndDay, timeStartMeeting, meetingDuration) => {
+  const timeStartDayInMin = getTimeInMinutes(timeStartDay);
+  const timeEndDayInMin = getTimeInMinutes(timeEndDay);
+  const timeStartMeetingInMin = getTimeInMinutes(timeStartMeeting);
+  const timeEndMeetingInMin = timeStartMeetingInMin + meetingDuration;
 
-  for (let i = 0; i < string.length; i++) {
-    if (!(isNaN(parseInt(string[i], 10)))) {
-      result += string[i];
-    }
-  }
-
-  return result === '' ? NaN : parseInt(result, 10);
+  return (timeStartDayInMin <= timeStartMeetingInMin) && (timeEndMeetingInMin <= timeEndDayInMin);
 };
 
-checkLine('hello', 5);
-isPalindrome('ДовОд');
-findNumber('007');
+isOnTime('08:00', '17:30', '14:00', 90); // true
+isOnTime('8:0', '10:0', '8:0', 120);     // true
+isOnTime('08:00', '14:30', '14:00', 90); // false
+isOnTime('14:00', '17:30', '08:0', 90);  // false
+isOnTime('8:00', '17:30', '08:00', 900); // false
