@@ -9,6 +9,10 @@ const CountLike = {
   MIN: 15,
   MAX: 200
 };
+const CountComments = {
+  MIN: 0,
+  MAX: 30
+};
 
 const NAMES = ['Masha', 'Sasha', 'Pasha', 'Dasha', 'Vasya', 'Popa'];
 const MESSAGES = [
@@ -19,22 +23,27 @@ const MESSAGES = [
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
+const generateComments = () => {
+  const generateRandomCountComments = createRandomIntFromRangeGenerator(CountComments.MIN, CountComments.MAX);
+  const generateRandomInteger = getRandomInteger();
+  return new Array(generateRandomCountComments()).fill('').map((_, index) => (
+    {
+      id: generateRandomInteger(),
+      avatar: `img/avatar-${getRandomIntegerFromRange(AvatarId.MIN, AvatarId.MAX)}.svg`,
+      message: MESSAGES[index % MESSAGES.length],
+      name: NAMES[index % NAMES.length]
+    }));
+};
 
 export const generateDataForPhoto = (countPhotos) => {
   const generatePhotoLikes = createRandomIntFromRangeGenerator(CountLike.MIN, CountLike.MAX);
-  const generateRandomInteger = getRandomInteger();
 
   return new Array(countPhotos).fill('').map((_, index) => (
     {
-      id: index,
+      id: ++index,
       url: `photos/${index}.jpg`,
       description: DESCRIPTION,
       likes: generatePhotoLikes(),
-      commets: {
-        id: generateRandomInteger(),
-        avatar: `img/avatar-${getRandomIntegerFromRange(AvatarId.MIN, AvatarId.MAX)}.svg`,
-        message: MESSAGES[index % MESSAGES.length],
-        name: NAMES[index % NAMES.length]
-      }
+      comments: generateComments()
     }));
 };

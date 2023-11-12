@@ -1,4 +1,3 @@
-import { generateDataForPhoto } from './data.js';
-const COUNT_PHOTOS = 25;
+import { drawPictures } from './draw.js';
 
-generateDataForPhoto(COUNT_PHOTOS);
+drawPictures();
