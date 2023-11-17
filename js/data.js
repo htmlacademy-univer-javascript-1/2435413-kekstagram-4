@@ -9,7 +9,7 @@ const CountLike = {
   MIN: 15,
   MAX: 200
 };
-const CountComments = {
+const CountComment = {
   MIN: 0,
   MAX: 30
 };
@@ -24,7 +24,7 @@ const MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'];
 
 const generateComments = () => {
-  const generateRandomCountComments = createRandomIntFromRangeGenerator(CountComments.MIN, CountComments.MAX);
+  const generateRandomCountComments = createRandomIntFromRangeGenerator(CountComment.MIN, CountComment.MAX);
   const generateRandomInteger = getRandomInteger();
   return new Array(generateRandomCountComments()).fill('').map((_, index) => (
     {
