@@ -9,7 +9,7 @@ const bigPictureInfo = {
   description: document.querySelector('.social__caption')
 };
 
-let photosNull = null;
+let photos = null;
 
 const getCommentTemplate = (comment) => `<li class="social__comment">
 <img class="social__picture" src=${comment.avatar} alt=${comment.name} width="35" height="35">
@@ -17,10 +17,10 @@ const getCommentTemplate = (comment) => `<li class="social__comment">
 </li>`;
 
 const thumbnailsInit = (data) => {
-  photosNull = data.slice();
+  photos = data.slice();
 
-  if (photosNull) {
-    thumbnailsContainerElement.insertAdjacentHTML('afterbegin', photosNull.map((element) => getCommentTemplate(element)).join(''));
+  if (photos) {
+    thumbnailsContainerElement.insertAdjacentHTML('afterbegin', photos.map((element) => getCommentTemplate(element)).join(''));
   }
 };
 
@@ -32,9 +32,9 @@ export const renderMainData = (photo) => {
 };
 
 export const renderComments = (comments) => {
-  const li = thumbnailsContainerElement.querySelectorAll('li');
+  const defaultComments = thumbnailsContainerElement.querySelectorAll('li');
 
-  li.forEach((value) => {
+  defaultComments.forEach((value) => {
     thumbnailsContainerElement.removeChild(value);
   });
 

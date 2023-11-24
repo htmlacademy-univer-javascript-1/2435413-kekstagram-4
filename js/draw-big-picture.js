@@ -13,21 +13,21 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
+const onCloseBtnClick = () => closeViewPopup();
+
 function closeViewPopup() {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
+  closeBtn.removeEventListener('click', onCloseBtnClick);
 }
 
 export const openViewPopup = (pictures, photos) => {
-  for (let i = 0; i < pictures.length; i++) {
-    pictures[i].addEventListener('click', () => {openPopup(photos[i]);});
-  }
-
-  closeBtn.addEventListener('click', () => {
-    closeViewPopup();
+  pictures.forEach((picture, index) =>  {
+    picture.addEventListener('click', () => openPopup(photos[index]));
   });
 
+  closeBtn.addEventListener('click', onCloseBtnClick);
   document.addEventListener('keydown', onDocumentKeydown);
 };
 
