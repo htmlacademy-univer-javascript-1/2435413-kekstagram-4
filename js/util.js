@@ -24,3 +24,5 @@ export const createRandomIntFromRangeGenerator = (min, max) => {
     return currentValue;
   };
 };
+
+export const isEscapeKey = (evt) => evt.key === 'Escape';
