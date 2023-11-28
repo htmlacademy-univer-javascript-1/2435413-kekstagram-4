@@ -1,6 +1,14 @@
-const thumbnailsContainerElement = document.querySelector('.social__comments');
-const countComments = document.querySelector('.social__comment-count');
-const loadBtn = document.querySelector('.comments-loader');
+const STEP_COMMENTS = 5;
+
+const loadComment = document.querySelector('.social__comment-count');
+const loadCommentCount = document.querySelector('.js-load-comment-count');
+export const loadBtn = document.querySelector('.comments-loader');
+
+let thumbnailsContainerElement;
+let defaultComments;
+let currentComments;
+let dataPhotos;
+let endIndex;
 
 const bigPictureInfo = {
   img: document.querySelector('.big-picture__img').querySelector('img'),
@@ -9,18 +17,29 @@ const bigPictureInfo = {
   description: document.querySelector('.social__caption')
 };
 
-let photos = null;
-
 const getCommentTemplate = (comment) => `<li class="social__comment">
 <img class="social__picture" src=${comment.avatar} alt=${comment.name} width="35" height="35">
 <p class="social__text">${comment.message}</p>
 </li>`;
 
 const thumbnailsInit = (data) => {
-  photos = data.slice();
+  endIndex = Math.min(data.length, endIndex + STEP_COMMENTS);
+  dataPhotos = data.slice(0, endIndex);
 
-  if (photos) {
-    thumbnailsContainerElement.insertAdjacentHTML('afterbegin', photos.map((element) => getCommentTemplate(element)).join(''));
+  thumbnailsContainerElement = document.querySelector('.social__comments');
+  defaultComments = thumbnailsContainerElement.querySelectorAll('li');
+
+  defaultComments.forEach((value) => {
+    thumbnailsContainerElement.removeChild(value);
+  });
+
+  if (dataPhotos) {
+    thumbnailsContainerElement.insertAdjacentHTML('beforeend', dataPhotos.map((element) => getCommentTemplate(element)).join(''));
+    loadCommentCount.textContent = `${endIndex} из ${data.length} комментариев`;
+  }
+
+  if (endIndex === data.length) {
+    loadBtn.classList.add('hidden');
   }
 };
 
@@ -31,14 +50,21 @@ export const renderMainData = (photo) => {
   bigPictureInfo.description.textContent = photo.description;
 };
 
-export const renderComments = (comments) => {
-  const defaultComments = thumbnailsContainerElement.querySelectorAll('li');
+export const onBtnClick = () => thumbnailsInit(currentComments);
 
-  defaultComments.forEach((value) => {
-    thumbnailsContainerElement.removeChild(value);
-  });
+export const renderComments = (comments) => {
+  endIndex = 0;
+  currentComments = comments;
 
   thumbnailsInit(comments);
-  countComments.classList.add('hidden');
-  loadBtn.classList.add('hidden');
+
+  if (comments.length <= STEP_COMMENTS) {
+    loadBtn.classList.add('hidden');
+    loadComment.classList.add('hidden');
+  } else {
+    loadBtn.classList.remove('hidden');
+    loadComment.classList.remove('hidden');
+
+    loadBtn.addEventListener('click', onBtnClick);
+  }
 };
