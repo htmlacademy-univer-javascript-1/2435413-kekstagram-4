@@ -4,11 +4,10 @@ const loadComment = document.querySelector('.social__comment-count');
 const loadCommentCount = document.querySelector('.js-load-comment-count');
 export const loadBtn = document.querySelector('.comments-loader');
 
-let thumbnailsContainerElement;
-let defaultComments;
-let currentComments;
-let dataPhotos;
-let endIndex;
+let thumbnailsContainerElement = document.querySelector('.social__comments');
+let currentComments = null;
+let sliceCurrentComments = null;
+let endIndex = 0;
 
 const bigPictureInfo = {
   img: document.querySelector('.big-picture__img').querySelector('img'),
@@ -22,23 +21,19 @@ const getCommentTemplate = (comment) => `<li class="social__comment">
 <p class="social__text">${comment.message}</p>
 </li>`;
 
-const thumbnailsInit = (data) => {
-  endIndex = Math.min(data.length, endIndex + STEP_COMMENTS);
-  dataPhotos = data.slice(0, endIndex);
+const thumbnailsInit = () => {
+  endIndex = Math.min(currentComments.length, endIndex + STEP_COMMENTS);
+  sliceCurrentComments = currentComments.slice(0, endIndex);
 
   thumbnailsContainerElement = document.querySelector('.social__comments');
-  defaultComments = thumbnailsContainerElement.querySelectorAll('li');
+  thumbnailsContainerElement.innerHTML = '';
 
-  defaultComments.forEach((value) => {
-    thumbnailsContainerElement.removeChild(value);
-  });
-
-  if (dataPhotos) {
-    thumbnailsContainerElement.insertAdjacentHTML('beforeend', dataPhotos.map((element) => getCommentTemplate(element)).join(''));
-    loadCommentCount.textContent = `${endIndex} из ${data.length} комментариев`;
+  if (sliceCurrentComments) {
+    thumbnailsContainerElement.insertAdjacentHTML('beforeend', sliceCurrentComments.map((element) => getCommentTemplate(element)).join(''));
+    loadCommentCount.textContent = `${endIndex} из ${currentComments.length} комментариев`;
   }
 
-  if (endIndex === data.length) {
+  if (endIndex === currentComments.length) {
     loadBtn.classList.add('hidden');
   }
 };
