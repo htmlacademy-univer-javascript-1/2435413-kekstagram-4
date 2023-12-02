@@ -4,7 +4,7 @@ const loadComment = document.querySelector('.social__comment-count');
 const loadCommentCount = document.querySelector('.js-load-comment-count');
 export const loadBtn = document.querySelector('.comments-loader');
 
-let thumbnailsContainerElement = document.querySelector('.social__comments');
+const thumbnailsContainerElement = document.querySelector('.social__comments');
 let currentComments = null;
 let sliceCurrentComments = null;
 let endIndex = 0;
@@ -25,7 +25,6 @@ const thumbnailsInit = () => {
   endIndex = Math.min(currentComments.length, endIndex + STEP_COMMENTS);
   sliceCurrentComments = currentComments.slice(0, endIndex);
 
-  thumbnailsContainerElement = document.querySelector('.social__comments');
   thumbnailsContainerElement.innerHTML = '';
 
   if (sliceCurrentComments) {
@@ -45,7 +44,7 @@ export const renderMainData = (photo) => {
   bigPictureInfo.description.textContent = photo.description;
 };
 
-export const onBtnClick = () => thumbnailsInit(currentComments);
+export const onLoadBtnClick = () => thumbnailsInit(currentComments);
 
 export const renderComments = (comments) => {
   endIndex = 0;
@@ -60,6 +59,6 @@ export const renderComments = (comments) => {
     loadBtn.classList.remove('hidden');
     loadComment.classList.remove('hidden');
 
-    loadBtn.addEventListener('click', onBtnClick);
+    loadBtn.addEventListener('click', onLoadBtnClick);
   }
 };
