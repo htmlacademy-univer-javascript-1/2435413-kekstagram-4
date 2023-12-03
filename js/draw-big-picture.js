@@ -26,7 +26,7 @@ const getCommentTemplate = (comment) => `<li class="social__comment">
 <p class="social__text">${comment.message}</p>
 </li>`;
 
-const thumbnailsInit = () => {
+const CommentsInit = () => {
   endIndex = Math.min(currentComments.length, endIndex + STEP_COMMENTS);
   sliceCurrentComments = currentComments.slice(0, endIndex);
 
@@ -49,13 +49,13 @@ const renderMainData = (photo) => {
   bigPictureInfo.description.textContent = photo.description;
 };
 
-const onLoadBtnClick = () => thumbnailsInit(currentComments);
+const onLoadBtnClick = () => CommentsInit(currentComments);
 
 const renderComments = (comments) => {
   endIndex = 0;
   currentComments = comments;
 
-  thumbnailsInit(comments);
+  CommentsInit(comments);
 
   if (comments.length <= STEP_COMMENTS) {
     loadBtn.classList.add('hidden');

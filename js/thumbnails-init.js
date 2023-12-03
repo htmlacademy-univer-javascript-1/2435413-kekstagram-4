@@ -4,7 +4,7 @@ const template = document.querySelector('#picture').content.querySelector('.pict
 const fragment = document.createDocumentFragment();
 const picturesContainer = document.querySelector('.pictures');
 
-export const drawPictures = (photos) => {
+export const thumbnailsInit = (photos) => {
   photos.forEach((photo) => {
     const templateClone = template.cloneNode(true);
     const img = templateClone.querySelector('.picture__img');
