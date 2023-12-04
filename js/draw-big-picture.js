@@ -63,7 +63,6 @@ const renderComments = (comments) => {
   } else {
     loadBtn.classList.remove('hidden');
     loadComment.classList.remove('hidden');
-
     loadBtn.addEventListener('click', onLoadBtnClick);
   }
 };
