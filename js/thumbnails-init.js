@@ -1,8 +1,10 @@
+import { openViewPopup } from './draw-big-picture.js';
+
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const fragment = document.createDocumentFragment();
-const pictures = document.querySelector('.pictures');
+const picturesContainer = document.querySelector('.pictures');
 
-export const drawPictures = (photos) => {
+export const thumbnailsInit = (photos) => {
   photos.forEach((photo) => {
     const templateClone = template.cloneNode(true);
     const img = templateClone.querySelector('.picture__img');
@@ -18,5 +20,10 @@ export const drawPictures = (photos) => {
     fragment.appendChild(templateClone);
   });
 
-  pictures.appendChild(fragment);
+  picturesContainer.appendChild(fragment);
+  const pictures = document.querySelectorAll('.picture');
+
+  pictures.forEach((picture, index) => {
+    picture.addEventListener('click', () => openViewPopup(photos[index]));
+  });
 };
