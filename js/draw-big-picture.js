@@ -3,12 +3,12 @@ import { isEscapeKey } from './util.js';
 const STEP_COMMENTS = 5;
 
 const bigPicture = document.querySelector('.big-picture');
-const closeBtn = document.querySelector('.big-picture__cancel');
+const closeBtn = bigPicture.querySelector('.big-picture__cancel');
 const body = document.querySelector('body');
-const thumbnailsContainerElement = document.querySelector('.social__comments');
-const loadComment = document.querySelector('.social__comment-count');
-const loadCommentCount = document.querySelector('.js-load-comment-count');
-const loadBtn = document.querySelector('.comments-loader');
+const thumbnailsContainerElement = bigPicture.querySelector('.social__comments');
+const loadComment = bigPicture.querySelector('.social__comment-count');
+const loadCommentCount = bigPicture.querySelector('.js-load-comment-count');
+const loadBtn = bigPicture.querySelector('.comments-loader');
 
 let currentComments = null;
 let sliceCurrentComments = null;
@@ -26,7 +26,7 @@ const getCommentTemplate = (comment) => `<li class="social__comment">
 <p class="social__text">${comment.message}</p>
 </li>`;
 
-const CommentsInit = () => {
+const renderComments = () => {
   endIndex = Math.min(currentComments.length, endIndex + STEP_COMMENTS);
   sliceCurrentComments = currentComments.slice(0, endIndex);
 
@@ -49,13 +49,13 @@ const renderMainData = (photo) => {
   bigPictureInfo.description.textContent = photo.description;
 };
 
-const onLoadBtnClick = () => CommentsInit(currentComments);
+const onLoadBtnClick = () => renderComments(currentComments);
 
-const renderComments = (comments) => {
+const initComments = (comments) => {
   endIndex = 0;
   currentComments = comments;
 
-  CommentsInit(comments);
+  renderComments(comments);
 
   if (comments.length <= STEP_COMMENTS) {
     loadBtn.classList.add('hidden');
@@ -86,7 +86,7 @@ function closeViewPopup() {
 
 export const openViewPopup = (photo) => {
   renderMainData(photo);
-  renderComments(photo.comments);
+  initComments(photo.comments);
 
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
