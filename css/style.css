@@ -1200,6 +1200,10 @@ main {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
+.error__input {
+  color: red;
+}
+
 .error__inner,
 .success__inner {
   position: relative;
