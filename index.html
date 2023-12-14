@@ -34,7 +34,7 @@
 
             <!-- Изначальное состояние поля для загрузки изображения -->
             <fieldset class="img-upload__start">
-              <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename" required>
+              <input type="file" id="upload-file" class="img-upload__input  visually-hidden" name="filename" accept="image/*">
               <label for="upload-file" class="img-upload__label  img-upload__control">Загрузить</label>
             </fieldset>
 
@@ -233,6 +233,8 @@
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
   <script src="vendor/pristine/pristine.min.js" type="text/javascript"></script>
+  <script src="vendor/nouislider/nouislider.min.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="vendor/nouislider/nouislider.min.css" type="text/css"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

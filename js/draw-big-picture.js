@@ -67,7 +67,7 @@ const initComments = (comments) => {
   }
 };
 
-const onDocumentKeydown = (evt) => {
+export const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     closeViewPopup();
