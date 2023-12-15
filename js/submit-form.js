@@ -1,15 +1,15 @@
 import { isEscapeKey } from './util.js';
 import { switchEffects, onEffectsContainerClick, effectsContainer } from './switch-effects.js';
 
-const ValuesCtrl = {
+const ValuesScaleCtrl = {
   MAX: 100,
-  MIN: 25
+  MIN: 25,
+  STEP: 25
 };
 
 const MAX_COUNT_HASHTAGS = 5;
 const REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
 const FILE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/png'];
-const STEP = 25;
 
 const form = document.querySelector('.img-upload__form');
 const body = document.querySelector('body');
@@ -75,10 +75,10 @@ const onScaleCtrlClick = (evt) => {
   currentValueCtrl = +valueCtrl.value.slice(0, -1);
 
   if (evt.target.textContent === 'Уменьшить') {
-    currentValueCtrl = Math.max(ValuesCtrl.MIN, currentValueCtrl - STEP);
+    currentValueCtrl = Math.max(ValuesScaleCtrl.MIN, currentValueCtrl - ValuesScaleCtrl.STEP);
   }
   if (evt.target.textContent === 'Увеличить') {
-    currentValueCtrl = Math.min(ValuesCtrl.MAX, currentValueCtrl + STEP);
+    currentValueCtrl = Math.min(ValuesScaleCtrl.MAX, currentValueCtrl + ValuesScaleCtrl.STEP);
   }
 
   valueCtrl.value = `${currentValueCtrl}%`;

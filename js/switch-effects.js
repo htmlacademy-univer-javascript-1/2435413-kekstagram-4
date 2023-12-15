@@ -1,10 +1,10 @@
 const Effects = {
-  'none': {
+  NONE: {
     STYLE: '',
     CLASS: 'effects__preview--none',
     UNIT: ''
   },
-  'chrome': {
+  CHROME: {
     STYLE: 'grayscale',
     CLASS: 'effects__preview--chrome',
     MIN: 0,
@@ -12,7 +12,7 @@ const Effects = {
     STEP: 0.1,
     UNIT: ''
   },
-  'sepia': {
+  SEPIA: {
     STYLE: 'sepia',
     CLASS: 'effects__preview--sepia',
     MIN: 0,
@@ -20,7 +20,7 @@ const Effects = {
     STEP: 0.1,
     UNIT: ''
   },
-  'marvin': {
+  MARVIN: {
     STYLE: 'invert',
     CLASS: 'effects__preview--marvin',
     MIN: 0,
@@ -28,7 +28,7 @@ const Effects = {
     STEP: 1,
     UNIT: '%'
   },
-  'phobos': {
+  PHOBOS: {
     STYLE: 'blur',
     CLASS: 'effects__preview--phobos',
     MIN: 0,
@@ -36,7 +36,7 @@ const Effects = {
     STEP: 0.1,
     UNIT: 'px'
   },
-  'heat': {
+  HEAT: {
     STYLE: 'brightness',
     CLASS: 'effects__preview--heat',
     MIN: 1,
@@ -53,7 +53,7 @@ export const effectsContainer = form.querySelector('.img-upload__effects');
 const slider = slidersContainer.querySelector('.effect-level__slider');
 const value = slidersContainer.querySelector('.effect-level__value');
 
-let nameEffect = 'none';
+let nameEffect = 'NONE';
 let effect = Effects[nameEffect];
 
 const updateSlider = (min, max, step) => {
@@ -70,7 +70,7 @@ const updateSlider = (min, max, step) => {
 
 const onSliderUpdate = () => {
   value.value = slider.noUiSlider.get();
-  if (nameEffect === 'none') {
+  if (nameEffect === 'NONE') {
     preview.style.filter = '';
   } else {
     preview.style.filter = `${Effects[nameEffect].STYLE}(${value.value}${Effects[nameEffect].UNIT})`;
@@ -81,10 +81,10 @@ export const onEffectsContainerClick = (evt) => {
   preview.classList.remove(effect.CLASS);
 
   if (evt.target.value !== undefined) {
-    nameEffect = evt.target.value;
+    nameEffect = evt.target.value.toUpperCase();
     effect = Effects[nameEffect];
 
-    if (nameEffect === 'none') {
+    if (nameEffect === 'NONE') {
       slider.classList.add('hidden');
       slidersContainer.classList.add('hidden');
     }
