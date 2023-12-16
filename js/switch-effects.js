@@ -1,60 +1,62 @@
-const Effects = {
+const Effect = {
   NONE: {
-    STYLE: '',
-    CLASS: 'effects__preview--none',
-    UNIT: ''
+    style: '',
+    class: 'effects__preview--none',
+    unit: ''
   },
   CHROME: {
-    STYLE: 'grayscale',
-    CLASS: 'effects__preview--chrome',
-    MIN: 0,
-    MAX: 1,
-    STEP: 0.1,
-    UNIT: ''
+    style: 'grayscale',
+    class: 'effects__preview--chrome',
+    min: 0,
+    max: 1,
+    step: 0.1,
+    unit: ''
   },
   SEPIA: {
-    STYLE: 'sepia',
-    CLASS: 'effects__preview--sepia',
-    MIN: 0,
-    MAX: 1,
-    STEP: 0.1,
-    UNIT: ''
+    style: 'sepia',
+    class: 'effects__preview--sepia',
+    min: 0,
+    max: 1,
+    step: 0.1,
+    unit: ''
   },
   MARVIN: {
-    STYLE: 'invert',
-    CLASS: 'effects__preview--marvin',
-    MIN: 0,
-    MAX: 100,
-    STEP: 1,
-    UNIT: '%'
+    style: 'invert',
+    class: 'effects__preview--marvin',
+    min: 0,
+    max: 100,
+    step: 1,
+    unit: '%'
   },
   PHOBOS: {
-    STYLE: 'blur',
-    CLASS: 'effects__preview--phobos',
-    MIN: 0,
-    MAX: 3,
-    STEP: 0.1,
-    UNIT: 'px'
+    style: 'blur',
+    class: 'effects__preview--phobos',
+    min: 0,
+    max: 3,
+    step: 0.1,
+    unit: 'px'
   },
   HEAT: {
-    STYLE: 'brightness',
-    CLASS: 'effects__preview--heat',
-    MIN: 1,
-    MAX: 3,
-    STEP: 0.1,
-    UNIT: ''
+    style: 'brightness',
+    class: 'effects__preview--heat',
+    min: 1,
+    max: 3,
+    step: 0.1,
+    unit: ''
   }
 };
+
+const DEFAULT_EFFECT = 'NONE';
 
 const form = document.querySelector('.img-upload__overlay');
 const preview = form.querySelector('.img-upload__preview');
 const slidersContainer = form.querySelector('.img-upload__effect-level');
-export const effectsContainer = form.querySelector('.img-upload__effects');
+const effectsContainer = form.querySelector('.img-upload__effects');
 const slider = slidersContainer.querySelector('.effect-level__slider');
 const value = slidersContainer.querySelector('.effect-level__value');
 
 let nameEffect = 'NONE';
-let effect = Effects[nameEffect];
+let effect = Effect[nameEffect];
 
 const updateSlider = (min, max, step) => {
   slider.noUiSlider.updateOptions({
@@ -70,21 +72,21 @@ const updateSlider = (min, max, step) => {
 
 const onSliderUpdate = () => {
   value.value = slider.noUiSlider.get();
-  if (nameEffect === 'NONE') {
+  if (nameEffect === DEFAULT_EFFECT) {
     preview.style.filter = '';
   } else {
-    preview.style.filter = `${Effects[nameEffect].STYLE}(${value.value}${Effects[nameEffect].UNIT})`;
+    preview.style.filter = `${Effect[nameEffect].STYLE}(${value.value}${Effect[nameEffect].UNIT})`;
   }
 };
 
-export const onEffectsContainerClick = (evt) => {
+const onEffectsContainerClick = (evt) => {
   preview.classList.remove(effect.CLASS);
 
   if (evt.target.value !== undefined) {
     nameEffect = evt.target.value.toUpperCase();
-    effect = Effects[nameEffect];
+    effect = Effect[nameEffect];
 
-    if (nameEffect === 'NONE') {
+    if (nameEffect === DEFAULT_EFFECT) {
       slider.classList.add('hidden');
       slidersContainer.classList.add('hidden');
     }
@@ -118,3 +120,5 @@ export const switchEffects = () => {
 
   effectsContainer.addEventListener('click', onEffectsContainerClick);
 };
+
+export const removeClickEffectsContainer = () => effectsContainer.removeEventListener('click', onEffectsContainerClick);

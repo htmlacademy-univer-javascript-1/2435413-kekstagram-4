@@ -1,5 +1,5 @@
 import { isEscapeKey } from './util.js';
-import { switchEffects, onEffectsContainerClick, effectsContainer } from './switch-effects.js';
+import { switchEffects, removeClickEffectsContainer } from './switch-effects.js';
 
 const ValuesScaleCtrl = {
   MAX: 100,
@@ -120,7 +120,7 @@ function closeViewPopup() {
   form.removeEventListener('keydown', onInputKeydown);
   form.removeEventListener('submit', submitForm);
   scaleCtrl.removeEventListener('click', onScaleCtrlClick);
-  effectsContainer.removeEventListener('click', onEffectsContainerClick);
+  removeClickEffectsContainer();
 }
 
 export const uploadImg = () => inputFile.addEventListener('change', openViewPopup);
