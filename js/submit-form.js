@@ -19,11 +19,11 @@ const popup = imgUpload.querySelector('.img-upload__overlay');
 const closeBtn = popup.querySelector('.img-upload__cancel');
 const inputHashtag = popup.querySelector('.text__hashtags');
 
-const scaleCtrl = popup.querySelector('.img-upload__scale');
-const valueCtrl = scaleCtrl.querySelector('.scale__control--value');
+const scaleControl = popup.querySelector('.img-upload__scale');
+const valueControl = scaleControl.querySelector('.scale__control--value');
 const picture = popup.querySelector('.img-upload__preview');
 
-let currentValueCtrl = +valueCtrl.value.slice(0, -1);
+let currentValueControl = +valueControl.value.slice(0, -1);
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -71,18 +71,18 @@ pristine.addValidator(inputHashtag, hasNotDuplicatesHashtags, 'хэш-теги �
 
 const isValidFileType = (file) => FILE_TYPES.some((type) => file.type === type);
 
-const onScaleCtrlClick = (evt) => {
-  currentValueCtrl = +valueCtrl.value.slice(0, -1);
+const onScaleControlClick = (evt) => {
+  currentValueControl = +valueControl.value.slice(0, -1);
 
   if (evt.target.textContent === 'Уменьшить') {
-    currentValueCtrl = Math.max(ValuesScaleControl.MIN, currentValueCtrl - ValuesScaleControl.STEP);
+    currentValueControl = Math.max(ValuesScaleControl.MIN, currentValueControl - ValuesScaleControl.STEP);
   }
   if (evt.target.textContent === 'Увеличить') {
-    currentValueCtrl = Math.min(ValuesScaleControl.MAX, currentValueCtrl + ValuesScaleControl.STEP);
+    currentValueControl = Math.min(ValuesScaleControl.MAX, currentValueControl + ValuesScaleControl.STEP);
   }
 
-  valueCtrl.value = `${currentValueCtrl}%`;
-  picture.style.scale = currentValueCtrl / 100;
+  valueControl.value = `${currentValueControl}%`;
+  picture.style.scale = currentValueControl / 100;
 };
 
 const openViewPopup = () => {
@@ -98,10 +98,10 @@ const openViewPopup = () => {
     form.addEventListener('submit', submitForm);
     inputFile.removeEventListener('change', openViewPopup);
 
-    valueCtrl.value = '100%';
+    valueControl.value = '100%';
     picture.style.scale = 1;
 
-    scaleCtrl.addEventListener('click', onScaleCtrlClick);
+    scaleControl.addEventListener('click', onScaleControlClick);
     switchEffects();
   }
 };
@@ -119,7 +119,7 @@ function closeViewPopup() {
   closeBtn.removeEventListener('click', closeViewPopup);
   form.removeEventListener('keydown', onInputKeydown);
   form.removeEventListener('submit', submitForm);
-  scaleCtrl.removeEventListener('click', onScaleCtrlClick);
+  scaleControl.removeEventListener('click', onScaleControlClick);
   removeClickEffectsContainer();
 }
 
