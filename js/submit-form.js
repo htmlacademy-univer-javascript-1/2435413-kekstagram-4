@@ -1,7 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { switchEffects, removeClickEffectsContainer } from './switch-effects.js';
 
-const ValuesScaleCtrl = {
+const ValuesScaleControl = {
   MAX: 100,
   MIN: 25,
   STEP: 25
@@ -75,10 +75,10 @@ const onScaleCtrlClick = (evt) => {
   currentValueCtrl = +valueCtrl.value.slice(0, -1);
 
   if (evt.target.textContent === 'Уменьшить') {
-    currentValueCtrl = Math.max(ValuesScaleCtrl.MIN, currentValueCtrl - ValuesScaleCtrl.STEP);
+    currentValueCtrl = Math.max(ValuesScaleControl.MIN, currentValueCtrl - ValuesScaleControl.STEP);
   }
   if (evt.target.textContent === 'Увеличить') {
-    currentValueCtrl = Math.min(ValuesScaleCtrl.MAX, currentValueCtrl + ValuesScaleCtrl.STEP);
+    currentValueCtrl = Math.min(ValuesScaleControl.MAX, currentValueCtrl + ValuesScaleControl.STEP);
   }
 
   valueCtrl.value = `${currentValueCtrl}%`;
