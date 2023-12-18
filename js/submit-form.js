@@ -1,10 +1,15 @@
-import { isEscapeKey } from './util.js';
+import { showAlert, isEscapeKey } from './util.js';
 import { switchEffects, removeClickEffectsContainer } from './switch-effects.js';
+import { sendData } from './api.js';
 
 const ValuesScaleControl = {
   MAX: 100,
   MIN: 25,
   STEP: 25
+};
+const SubmitButtonText = {
+  IDLE: 'Опубликовать',
+  SENDING: 'Публикую...'
 };
 
 const MAX_COUNT_HASHTAGS = 5;
@@ -18,10 +23,10 @@ const inputFile = imgUpload.querySelector('.img-upload__input');
 const popup = imgUpload.querySelector('.img-upload__overlay');
 const closeBtn = popup.querySelector('.img-upload__cancel');
 const inputHashtag = popup.querySelector('.text__hashtags');
-
 const scaleControl = popup.querySelector('.img-upload__scale');
 const valueControl = scaleControl.querySelector('.scale__control--value');
 const picture = popup.querySelector('.img-upload__preview');
+const submitButton = form.querySelector('.img-upload__submit');
 
 let currentValueControl = +valueControl.value.slice(0, -1);
 
@@ -32,6 +37,16 @@ const pristine = new Pristine(form, {
   errorTextTag: 'div',
   errorTextClass: 'error__input'
 });
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
 
 const getHashtags = () => inputHashtag.value.trim().split(' ');
 
@@ -60,8 +75,14 @@ const onDocumentKeydown = (evt) => {
 };
 
 const submitForm = (evt) => {
-  if (!isValid()) {
-    evt.preventDefault();
+  evt.preventDefault();
+
+  if (isValid()) {
+    blockSubmitButton();
+    sendData(new FormData(evt.target))
+      .then(closeViewPopup)
+      .catch((err) => showAlert(err.message))
+      .finally(unblockSubmitButton);
   }
 };
 

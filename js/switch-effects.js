@@ -1,12 +1,10 @@
 const Effect = {
   NONE: {
     style: '',
-    class: 'effects__preview--none',
     unit: ''
   },
   CHROME: {
     style: 'grayscale',
-    class: 'effects__preview--chrome',
     min: 0,
     max: 1,
     step: 0.1,
@@ -14,7 +12,6 @@ const Effect = {
   },
   SEPIA: {
     style: 'sepia',
-    class: 'effects__preview--sepia',
     min: 0,
     max: 1,
     step: 0.1,
@@ -22,7 +19,6 @@ const Effect = {
   },
   MARVIN: {
     style: 'invert',
-    class: 'effects__preview--marvin',
     min: 0,
     max: 100,
     step: 1,
@@ -30,7 +26,6 @@ const Effect = {
   },
   PHOBOS: {
     style: 'blur',
-    class: 'effects__preview--phobos',
     min: 0,
     max: 3,
     step: 0.1,
@@ -38,7 +33,6 @@ const Effect = {
   },
   HEAT: {
     style: 'brightness',
-    class: 'effects__preview--heat',
     min: 1,
     max: 3,
     step: 0.1,
@@ -75,12 +69,12 @@ const onSliderUpdate = () => {
   if (nameEffect === DEFAULT_EFFECT) {
     preview.style.filter = '';
   } else {
-    preview.style.filter = `${Effect[nameEffect].STYLE}(${value.value}${Effect[nameEffect].UNIT})`;
+    preview.style.filter = `${Effect[nameEffect].style}(${value.value}${Effect[nameEffect].unit})`;
   }
 };
 
 const onEffectsContainerClick = (evt) => {
-  preview.classList.remove(effect.CLASS);
+  preview.classList.remove(effect.class);
 
   if (evt.target.value !== undefined) {
     nameEffect = evt.target.value.toUpperCase();
@@ -91,14 +85,13 @@ const onEffectsContainerClick = (evt) => {
       slidersContainer.classList.add('hidden');
     }
     else {
-      updateSlider(effect.MIN, effect.MAX, effect.STEP);
+      updateSlider(effect.min, effect.max, effect.step);
 
       slider.classList.remove('hidden');
       slidersContainer.classList.remove('hidden');
     }
 
     slider.noUiSlider.on('update', onSliderUpdate);
-    preview.classList.add(effect.CLASS);
   }
 };
 
@@ -112,7 +105,6 @@ noUiSlider.create(slider, {
 });
 
 export const switchEffects = () => {
-  preview.classList.remove(effect.CLASS);
   preview.style.filter = '';
 
   slider.classList.add('hidden');
