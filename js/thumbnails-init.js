@@ -1,8 +1,19 @@
 import { openViewPopup } from './draw-big-picture.js';
+import { appendCloneInBody } from './util.js';
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const fragment = document.createDocumentFragment();
 const picturesContainer = document.querySelector('.pictures');
+
+const errorMessageTemplate = document.querySelector('#error').content.cloneNode(true);
+const successMessageTemplate = document.querySelector('#success').content.cloneNode(true);
+const loadMessageTemplate = document.querySelector('#messages').content.cloneNode(true);
+
+export const errorMessageClone = errorMessageTemplate.firstElementChild;
+export const successMessageClone = successMessageTemplate.firstElementChild;
+export const loadMessageClone = loadMessageTemplate.firstElementChild;
+
+const destroyThumbnails = () => document.querySelectorAll('.picture').forEach((picture) => picturesContainer.removeChild(picture));
 
 export const thumbnailsInit = (photos) => {
   photos.forEach((photo) => {
@@ -19,6 +30,12 @@ export const thumbnailsInit = (photos) => {
 
     fragment.appendChild(templateClone);
   });
+
+  appendCloneInBody(errorMessageClone);
+  appendCloneInBody(successMessageClone);
+  appendCloneInBody(loadMessageClone);
+
+  destroyThumbnails();
 
   picturesContainer.appendChild(fragment);
   const pictures = document.querySelectorAll('.picture');

@@ -1,15 +1,12 @@
-import { showAlert, isEscapeKey } from './util.js';
+import { isEscapeKey } from './util.js';
 import { switchEffects, removeClickEffectsContainer } from './switch-effects.js';
 import { sendData } from './api.js';
+import { errorMessageClone, loadMessageClone, successMessageClone } from './thumbnails-init.js';
 
 const ValuesScaleControl = {
   MAX: 100,
   MIN: 25,
   STEP: 25
-};
-const SubmitButtonText = {
-  IDLE: 'Опубликовать',
-  SENDING: 'Публикую...'
 };
 
 const MAX_COUNT_HASHTAGS = 5;
@@ -28,7 +25,13 @@ const valueControl = scaleControl.querySelector('.scale__control--value');
 const picture = popup.querySelector('.img-upload__preview');
 const submitButton = form.querySelector('.img-upload__submit');
 
+const errorBtn = errorMessageClone.querySelector('.error__button');
+const successBtn = successMessageClone.querySelector('.success__button');
+
 let currentValueControl = +valueControl.value.slice(0, -1);
+let isErrorOccurred = false;
+let currentMessage = null;
+let currentMessageBtn = null;
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -38,14 +41,38 @@ const pristine = new Pristine(form, {
   errorTextClass: 'error__input'
 });
 
+const showAlert = () => {
+  currentMessage = errorMessageClone;
+  currentMessageBtn = errorBtn;
+  isErrorOccurred = true;
+
+  errorMessageClone.classList.remove('hidden');
+
+  errorBtn.addEventListener('click', closeMessage);
+  document.addEventListener('keydown', closeMessage);
+  document.addEventListener('click', closeMessage);
+};
+
+const showSuccess = () => {
+  currentMessage = successMessageClone;
+  currentMessageBtn = successBtn;
+
+  successMessageClone.classList.remove('hidden');
+
+  successBtn.addEventListener('click', closeMessage);
+  document.addEventListener('keydown', closeMessage);
+  document.addEventListener('click', closeMessage);
+};
+
 const blockSubmitButton = () => {
   submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
+  loadMessageClone.classList.remove('hidden');
 };
 
 const unblockSubmitButton = () => {
   submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
+  loadMessageClone.classList.add('hidden');
+  closeViewPopup();
 };
 
 const getHashtags = () => inputHashtag.value.trim().split(' ');
@@ -76,12 +103,13 @@ const onDocumentKeydown = (evt) => {
 
 const submitForm = (evt) => {
   evt.preventDefault();
+  isErrorOccurred = false;
 
   if (isValid()) {
     blockSubmitButton();
     sendData(new FormData(evt.target))
-      .then(closeViewPopup)
-      .catch((err) => showAlert(err.message))
+      .then(showSuccess)
+      .catch(showAlert)
       .finally(unblockSubmitButton);
   }
 };
@@ -131,9 +159,11 @@ function closeViewPopup() {
   popup.classList.add('hidden');
   body.classList.remove('modal-open');
 
-  inputFile.value = '';
-  inputHashtag.value = '';
-  form.value = '';
+  if (!isErrorOccurred) {
+    inputFile.value = '';
+    inputHashtag.value = '';
+    form.value = '';
+  }
 
   inputFile.addEventListener('change', openViewPopup);
   document.removeEventListener('keydown', onDocumentKeydown);
@@ -142,6 +172,20 @@ function closeViewPopup() {
   form.removeEventListener('submit', submitForm);
   scaleControl.removeEventListener('click', onScaleControlClick);
   removeClickEffectsContainer();
+}
+
+function closeMessage(evt) {
+  if (isEscapeKey(evt) || evt.target === currentMessage || evt.target === currentMessageBtn) {
+    evt.preventDefault();
+    currentMessage.classList.add('hidden');
+    currentMessageBtn.removeEventListener('click', closeMessage);
+    document.removeEventListener('keydown', closeMessage);
+    document.removeEventListener('click', closeMessage);
+  }
+
+  if (currentMessage === errorMessageClone) {
+    openViewPopup();
+  }
 }
 
 export const uploadImg = () => inputFile.addEventListener('change', openViewPopup);
