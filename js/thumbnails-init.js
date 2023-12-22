@@ -1,5 +1,5 @@
 import { openViewPopup } from './draw-big-picture.js';
-import { appendCloneInBody } from './util.js';
+import { appendCloneInBody } from './utils.js';
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const fragment = document.createDocumentFragment();

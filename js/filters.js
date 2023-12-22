@@ -1,5 +1,4 @@
-import { thumbnailsInit } from './thumbnails-init.js';
-import { sortByComments, sortRandom } from './util.js';
+import { sortByComments, sortRandom} from './utils.js';
 
 const HIDDEN_CONTAINER_CLASS = 'img-filters--inactive';
 const ACTIVE_FILTER_CLASS = 'img-filters__button--active';
@@ -16,6 +15,7 @@ const filtersForm = filtersContainer.querySelector('.img-filters__form');
 
 let thumbnails = null;
 let activeFilter = Filter.DEFAULT;
+let callback = null;
 
 const filterFunction = {
   [Filter.DEFAULT]: () => thumbnails,
@@ -29,16 +29,18 @@ const onFiltersContainerClick = (evt) => {
     filtersForm.querySelector(`#${activeFilter}`).classList.remove(ACTIVE_FILTER_CLASS);
     evt.target.classList.add(ACTIVE_FILTER_CLASS);
     activeFilter = id;
-
-    thumbnailsInit(filterFunction[id]());
+    if (callback) {
+      callback(filterFunction[id]());
+    }
   }
 };
 
-export const initFilters = (data) => {
+export const initFilters = (data, cb) => {
   thumbnails = data.slice();
+  callback = cb;
 
   filtersContainer.classList.remove(HIDDEN_CONTAINER_CLASS);
   filtersContainer.addEventListener('click', onFiltersContainerClick);
 
-  thumbnailsInit(thumbnails);
+  cb(thumbnails);
 };
