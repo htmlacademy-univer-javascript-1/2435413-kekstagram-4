@@ -1,4 +1,4 @@
-import { isEscapeKey } from './util.js';
+import { isEscapeKey } from './utils.js';
 import { switchEffects, removeClickEffectsContainer } from './switch-effects.js';
 import { sendData } from './api.js';
 import { errorMessageClone, loadMessageClone, successMessageClone } from './thumbnails-init.js';
@@ -14,6 +14,7 @@ const REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
 const FILE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/png'];
 
 const form = document.querySelector('.img-upload__form');
+const description = form.querySelector('.text__description');
 const body = document.querySelector('body');
 const imgUpload = body.querySelector('.img-upload');
 const inputFile = imgUpload.querySelector('.img-upload__input');
@@ -22,7 +23,7 @@ const closeBtn = popup.querySelector('.img-upload__cancel');
 const inputHashtag = popup.querySelector('.text__hashtags');
 const scaleControl = popup.querySelector('.img-upload__scale');
 const valueControl = scaleControl.querySelector('.scale__control--value');
-const picture = popup.querySelector('.img-upload__preview');
+const picture = popup.querySelector('.img-upload__preview img');
 const submitButton = form.querySelector('.img-upload__submit');
 
 const errorBtn = errorMessageClone.querySelector('.error__button');
@@ -103,7 +104,6 @@ const onDocumentKeydown = (evt) => {
 
 const submitForm = (evt) => {
   evt.preventDefault();
-  isErrorOccurred = false;
 
   if (isValid()) {
     blockSubmitButton();
@@ -118,7 +118,7 @@ pristine.addValidator(inputHashtag, isValidHashtags, 'введён невали�
 pristine.addValidator(inputHashtag, isCorrectCountHashtags, 'превышено количество хэш-тегов');
 pristine.addValidator(inputHashtag, hasNotDuplicatesHashtags, 'хэш-теги повторяются');
 
-const isValidFileType = (file) => FILE_TYPES.some((type) => file.type === type);
+const isValidFileType = (file) => FILE_TYPES.some((type) => file.type.toLowerCase() === type);
 
 const onScaleControlClick = (evt) => {
   currentValueControl = +valueControl.value.slice(0, -1);
@@ -135,9 +135,12 @@ const onScaleControlClick = (evt) => {
 };
 
 const openViewPopup = () => {
+  isErrorOccurred = false;
   const file = inputFile.files[0];
 
   if (isValidFileType(file)) {
+    picture.src = URL.createObjectURL(file);
+
     popup.classList.remove('hidden');
     body.classList.add('modal-open');
 
@@ -163,6 +166,7 @@ function closeViewPopup() {
     inputFile.value = '';
     inputHashtag.value = '';
     form.value = '';
+    description.value = '';
   }
 
   inputFile.addEventListener('change', openViewPopup);
