@@ -43,13 +43,13 @@ const Effect = {
 const DEFAULT_EFFECT = 'NONE';
 
 const form = document.querySelector('.img-upload__overlay');
-const preview = form.querySelector('.img-upload__preview');
+const preview = form.querySelector('.img-upload__preview img');
 const slidersContainer = form.querySelector('.img-upload__effect-level');
 const effectsContainer = form.querySelector('.img-upload__effects');
 const slider = slidersContainer.querySelector('.effect-level__slider');
 const value = slidersContainer.querySelector('.effect-level__value');
 
-let nameEffect = 'NONE';
+let nameEffect = DEFAULT_EFFECT;
 let effect = Effect[nameEffect];
 
 const updateSlider = (min, max, step) => {
@@ -65,7 +65,7 @@ const updateSlider = (min, max, step) => {
 };
 
 const onSliderUpdate = () => {
-  value.value = slider.noUiSlider.get();
+  value.value = +slider.noUiSlider.get();
   if (nameEffect === DEFAULT_EFFECT) {
     preview.style.filter = '';
   } else {

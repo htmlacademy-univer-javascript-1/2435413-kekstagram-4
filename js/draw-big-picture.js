@@ -2,13 +2,13 @@ import { isEscapeKey } from './utils.js';
 
 const STEP_COMMENTS = 5;
 
-const bigPicture = document.querySelector('.big-picture');
-const closeBtn = bigPicture.querySelector('.big-picture__cancel');
+const popup = document.querySelector('.big-picture');
+const closeBtn = popup.querySelector('.big-picture__cancel');
 const body = document.querySelector('body');
-const thumbnailsContainerElement = bigPicture.querySelector('.social__comments');
-const loadComment = bigPicture.querySelector('.social__comment-count');
-const loadCommentCount = bigPicture.querySelector('.js-load-comment-count');
-const loadBtn = bigPicture.querySelector('.comments-loader');
+const thumbnailsContainerElement = popup.querySelector('.social__comments');
+const loadComment = popup.querySelector('.social__comment-count');
+const loadCommentCount = popup.querySelector('.js-load-comment-count');
+const loadBtn = popup.querySelector('.comments-loader');
 
 let currentComments = null;
 let sliceCurrentComments = null;
@@ -77,7 +77,7 @@ const onDocumentKeydown = (evt) => {
 const onCloseBtnClick = () => closeViewPopup();
 
 function closeViewPopup() {
-  bigPicture.classList.add('hidden');
+  popup.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onDocumentKeydown);
   closeBtn.removeEventListener('click', onCloseBtnClick);
@@ -88,7 +88,7 @@ export const openViewPopup = (photo) => {
   renderMainData(photo);
   initComments(photo.comments);
 
-  bigPicture.classList.remove('hidden');
+  popup.classList.remove('hidden');
   body.classList.add('modal-open');
   document.addEventListener('keydown', onDocumentKeydown);
   closeBtn.addEventListener('click', onCloseBtnClick);
