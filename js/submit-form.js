@@ -1,7 +1,7 @@
 import { isEscapeKey } from './utils.js';
 import { switchEffects, removeClickEffectsContainer } from './switch-effects.js';
 import { sendData } from './api.js';
-import { errorMessageClone, loadMessageClone, successMessageClone } from './thumbnails-init.js';
+import { errorMessageClone, successMessageClone } from './thumbnails-init.js';
 
 const ValuesScaleControl = {
   MAX: 100,
@@ -11,7 +11,7 @@ const ValuesScaleControl = {
 
 const MAX_COUNT_HASHTAGS = 5;
 const REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
-const FILE_TYPES = ['image/jpeg', 'image/pjpeg', 'image/png'];
+const FILE_TYPES = ['image/jpeg', 'image/svg', 'image/png'];
 
 const form = document.querySelector('.img-upload__form');
 const description = form.querySelector('.text__description');
@@ -23,7 +23,7 @@ const closeBtn = popup.querySelector('.img-upload__cancel');
 const inputHashtag = popup.querySelector('.text__hashtags');
 const scaleControl = popup.querySelector('.img-upload__scale');
 const valueControl = scaleControl.querySelector('.scale__control--value');
-const picture = popup.querySelector('.img-upload__preview img');
+const preview = popup.querySelector('.img-upload__preview img');
 const submitButton = form.querySelector('.img-upload__submit');
 
 const errorBtn = errorMessageClone.querySelector('.error__button');
@@ -31,8 +31,6 @@ const successBtn = successMessageClone.querySelector('.success__button');
 
 let currentValueControl = +valueControl.value.slice(0, -1);
 let isErrorOccurred = false;
-let currentMessage = null;
-let currentMessageBtn = null;
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -42,37 +40,53 @@ const pristine = new Pristine(form, {
   errorTextClass: 'error__input'
 });
 
+const onErrorBtnClick = () => closeErrorMessage();
+
+const onSuccessBtnClick = () => closeSuccessMessage();
+
+const onDocumentClick = (evt) => {
+  if (evt.target === errorMessageClone) {
+    closeErrorMessage();
+  }
+  if (evt.target === successMessageClone) {
+    closeSuccessMessage();
+  }
+};
+
+const onCloseBtnClick = () => closeViewPopup();
+
+const onMessageKeydown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    closeErrorMessage();
+    closeSuccessMessage();
+  }
+};
+
 const showAlert = () => {
-  currentMessage = errorMessageClone;
-  currentMessageBtn = errorBtn;
   isErrorOccurred = true;
 
   errorMessageClone.classList.remove('hidden');
 
-  errorBtn.addEventListener('click', closeMessage);
-  document.addEventListener('keydown', closeMessage);
-  document.addEventListener('click', closeMessage);
+  errorBtn.addEventListener('click', onErrorBtnClick);
+  document.addEventListener('keydown', onMessageKeydown);
+  document.addEventListener('click', onDocumentClick);
 };
 
 const showSuccess = () => {
-  currentMessage = successMessageClone;
-  currentMessageBtn = successBtn;
-
   successMessageClone.classList.remove('hidden');
 
-  successBtn.addEventListener('click', closeMessage);
-  document.addEventListener('keydown', closeMessage);
-  document.addEventListener('click', closeMessage);
+  successBtn.addEventListener('click', onSuccessBtnClick);
+  document.addEventListener('keydown', onMessageKeydown);
+  document.addEventListener('click', onDocumentClick);
 };
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
-  loadMessageClone.classList.remove('hidden');
 };
 
 const unblockSubmitButton = () => {
   submitButton.disabled = false;
-  loadMessageClone.classList.add('hidden');
   closeViewPopup();
 };
 
@@ -102,7 +116,7 @@ const onDocumentKeydown = (evt) => {
   }
 };
 
-const submitForm = (evt) => {
+const onInputSubmit = (evt) => {
   evt.preventDefault();
 
   if (isValid()) {
@@ -131,7 +145,7 @@ const onScaleControlClick = (evt) => {
   }
 
   valueControl.value = `${currentValueControl}%`;
-  picture.style.scale = currentValueControl / 100;
+  preview.style.scale = currentValueControl / 100;
 };
 
 const openViewPopup = () => {
@@ -139,19 +153,18 @@ const openViewPopup = () => {
   const file = inputFile.files[0];
 
   if (isValidFileType(file)) {
-    picture.src = URL.createObjectURL(file);
+    preview.src = URL.createObjectURL(file);
 
     popup.classList.remove('hidden');
     body.classList.add('modal-open');
 
     document.addEventListener('keydown', onDocumentKeydown);
-    closeBtn.addEventListener('click', closeViewPopup);
+    closeBtn.addEventListener('click', onCloseBtnClick);
     form.addEventListener('keydown', onInputKeydown);
-    form.addEventListener('submit', submitForm);
-    inputFile.removeEventListener('change', openViewPopup);
+    form.addEventListener('submit', onInputSubmit);
 
     valueControl.value = '100%';
-    picture.style.scale = 1;
+    preview.style.scale = 1;
 
     scaleControl.addEventListener('click', onScaleControlClick);
     switchEffects();
@@ -169,27 +182,30 @@ function closeViewPopup() {
     description.value = '';
   }
 
-  inputFile.addEventListener('change', openViewPopup);
   document.removeEventListener('keydown', onDocumentKeydown);
-  closeBtn.removeEventListener('click', closeViewPopup);
+  closeBtn.removeEventListener('click', onCloseBtnClick);
   form.removeEventListener('keydown', onInputKeydown);
-  form.removeEventListener('submit', submitForm);
+  form.removeEventListener('submit', onInputSubmit);
   scaleControl.removeEventListener('click', onScaleControlClick);
   removeClickEffectsContainer();
 }
 
-function closeMessage(evt) {
-  if (isEscapeKey(evt) || evt.target === currentMessage || evt.target === currentMessageBtn) {
-    evt.preventDefault();
-    currentMessage.classList.add('hidden');
-    currentMessageBtn.removeEventListener('click', closeMessage);
-    document.removeEventListener('keydown', closeMessage);
-    document.removeEventListener('click', closeMessage);
-  }
+const removeEventonDocument = () => {
+  document.removeEventListener('keydown', onMessageKeydown);
+  document.removeEventListener('click', onDocumentClick);
+};
 
-  if (currentMessage === errorMessageClone) {
-    openViewPopup();
-  }
+function closeErrorMessage() {
+  errorMessageClone.classList.add('hidden');
+  errorBtn.removeEventListener('click', onErrorBtnClick);
+  openViewPopup();
+  removeEventonDocument();
 }
 
-export const uploadImg = () => inputFile.addEventListener('change', openViewPopup);
+function closeSuccessMessage() {
+  successMessageClone.classList.add('hidden');
+  successBtn.removeEventListener('click', onSuccessBtnClick);
+  removeEventonDocument();
+}
+
+export const uploadImg = () => inputFile.addEventListener('change', () => openViewPopup());

@@ -3,17 +3,15 @@ import { appendCloneInBody } from './utils.js';
 
 const template = document.querySelector('#picture').content.querySelector('.picture');
 const fragment = document.createDocumentFragment();
-const picturesContainer = document.querySelector('.pictures');
+const thumbnailsContainer = document.querySelector('.pictures');
 
 const errorMessageTemplate = document.querySelector('#error').content.cloneNode(true);
 const successMessageTemplate = document.querySelector('#success').content.cloneNode(true);
-const loadMessageTemplate = document.querySelector('#messages').content.cloneNode(true);
 
 export const errorMessageClone = errorMessageTemplate.firstElementChild;
 export const successMessageClone = successMessageTemplate.firstElementChild;
-export const loadMessageClone = loadMessageTemplate.firstElementChild;
 
-const destroyThumbnails = () => document.querySelectorAll('.picture').forEach((picture) => picturesContainer.removeChild(picture));
+const destroyThumbnails = () => document.querySelectorAll('.picture').forEach((picture) => thumbnailsContainer.removeChild(picture));
 
 export const thumbnailsInit = (photos) => {
   photos.forEach((photo) => {
@@ -33,14 +31,13 @@ export const thumbnailsInit = (photos) => {
 
   appendCloneInBody(errorMessageClone);
   appendCloneInBody(successMessageClone);
-  appendCloneInBody(loadMessageClone);
 
   destroyThumbnails();
 
-  picturesContainer.appendChild(fragment);
-  const pictures = document.querySelectorAll('.picture');
+  thumbnailsContainer.appendChild(fragment);
+  const thumbnails = document.querySelectorAll('.picture');
 
-  pictures.forEach((picture, index) => {
-    picture.addEventListener('click', () => openViewPopup(photos[index]));
+  thumbnails.forEach((thumbnail, index) => {
+    thumbnail.addEventListener('click', () => openViewPopup(photos[index]));
   });
 };
